@@ -1,0 +1,15 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              xmlns:tools="http://schemas.android.com/tools"
+              android:id="@+id/container"
+              android:layout_width="fill_parent"
+              android:layout_height="fill_parent"
+              android:orientation="vertical"
+    tools:context="com.robert.uitracker.app.MainActivity"
+    android:background="#ffffffff"
+    android:baselineAligned="true">
+    <com.robert.uitracker.app.MySurfaceView
+        android:layout_width="2.021in"
+        android:layout_height="1.564in"
+        android:background="@drawable/ppoverlay"
+        android:id="@+id/image_here"/>
+</LinearLayout>

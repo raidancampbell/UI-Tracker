@@ -1,0 +1,25 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context="com.robert.uitracker.app.MainActivity" >
+    <item android:id="@+id/remove_settings"
+        android:title="Hide Image"
+        android:orderInCategory="100"
+        app:showAsAction="never" />
+    <item android:id="@+id/hide_settings"
+          android:title="Hide Touches"
+          android:orderInCategory="100"
+          app:showAsAction="never" />
+    <item android:id="@+id/clear_settings"
+          android:title="Clear Touches"
+          android:orderInCategory="100"
+          app:showAsAction="never" />
+    <item android:id="@+id/load_settings"
+          android:title="Load Image"
+          android:orderInCategory="100"
+          app:showAsAction="never" />
+    <item android:id="@+id/size_settings"
+          android:title="Set Image Size"
+          android:orderInCategory="100"
+          app:showAsAction="never" />
+</menu>
