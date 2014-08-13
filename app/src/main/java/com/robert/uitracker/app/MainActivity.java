@@ -10,7 +10,6 @@ import android.graphics.Color;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
-import android.media.Image;
 import android.net.Uri;
 import android.provider.MediaStore;
 import android.support.v7.app.ActionBarActivity;
@@ -23,19 +22,18 @@ import android.view.MenuItem;
 import android.widget.EditText;
 import android.widget.ImageView;
 
-import java.util.LinkedList;
-
 public class MainActivity extends ActionBarActivity {
 
   private boolean imageIsShown = true;
   private Menu myMenu;
   Drawable image;
   Drawable blank;
-  double x_mm;
-  int xpix = 100;
-  double y_mm;
-  int ypix = 100;
+  int x_mm;
+  int xpix = 400;
+  int y_mm;
+  int ypix = 400;
   String x_or_y = "X";
+  boolean usePixel =false;
 
   @Override
   protected void onCreate(Bundle savedInstanceState) {
@@ -58,11 +56,11 @@ public class MainActivity extends ActionBarActivity {
     int id = item.getItemId();
     if(id == R.id.remove_settings) {//whitewash the current image
       if(imageIsShown) {
-        ((MenuItem) myMenu.findItem(R.id.remove_settings)).setTitle("Show Image");//change text
+        (myMenu.findItem(R.id.remove_settings)).setTitle("Show Image");//change text
         (findViewById(R.id.image_here)).setBackgroundDrawable(blank);//remove image
       }
       if(!imageIsShown) {
-        ((MenuItem) myMenu.findItem(R.id.remove_settings)).setTitle("Hide Image");//change text
+        (myMenu.findItem(R.id.remove_settings)).setTitle("Hide Image");//change text
         (findViewById(R.id.image_here)).setBackgroundDrawable(image);//remove image
       }
       imageIsShown = !imageIsShown;
@@ -79,16 +77,18 @@ public class MainActivity extends ActionBarActivity {
     if(id == R.id.size_settings) {
       //very very duct taped.  Hacked together using internet frankencode.
       //this code is not poetry.  It is oh-noetry.
-      Log.d("DEBUG","Size settings just called.  XXXXXXXXXXXXXXXXXXXXX");
-      Log.d("DEBUG", "x_or_y just set to Y");
+      usePixel = false;
       x_or_y = "Y";
       query("Y");
-      Log.d("DEBUG", "x_or_y just set to X");
       x_or_y = "X";
       query("X");
-      int width = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_MM, (int)(x_mm), getResources().getDisplayMetrics());
-      int height = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_MM, (int) (y_mm), getResources().getDisplayMetrics());
-      Log.d("DEBUG","Custom View dimension set, in pixels, to: "+width+" x "+height);
+    }
+    if(id==R.id.sizepx_settings){
+      usePixel = true;
+      x_or_y = "Y";
+      query("Y");
+      x_or_y = "X";
+      query("X");
     }
     if(id==R.id.hide_settings){
       MySurfaceView holder = ((MySurfaceView) findViewById(R.id.image_here));
@@ -104,10 +104,12 @@ public class MainActivity extends ActionBarActivity {
     return super.onOptionsItemSelected(item);
   }
 
-  public void resizeImage(int xpx, int ypx){
+  public void resizeImage(int x, int y){
     MySurfaceView parent = ((MySurfaceView) findViewById(R.id.image_here));
-    parent.getLayoutParams().height = ypx;
-    parent.getLayoutParams().width = xpx;
+    parent.getLayoutParams().height = y;
+    if(usePixel) parent.getLayoutParams().height = ypix;
+    parent.getLayoutParams().width = x;
+    if(usePixel) parent.getLayoutParams().width = xpix;
     parent.setScaleType(ImageView.ScaleType.FIT_XY);
   }
 
@@ -132,14 +134,11 @@ public class MainActivity extends ActionBarActivity {
     }
   }
 
-
-
-
   private int query(String xy) {
     Log.d("DEBUG","Query just called. x_or_y set to " + x_or_y);
     AlertDialog.Builder alert = new AlertDialog.Builder(this);
     alert.setTitle("Enter "+xy+" length");
-    alert.setMessage("Enter "+xy+" dimension in millimeters");
+    alert.setMessage("Enter "+xy+" dimension");
     final EditText input = new EditText(this);
     input.setInputType(InputType.TYPE_CLASS_NUMBER);
     alert.setView(input);
@@ -147,28 +146,25 @@ public class MainActivity extends ActionBarActivity {
     alert.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
       public void onClick(DialogInterface dialog, int whichButton) {
         String value = input.getText().toString();
-        if(x_or_y.equals("X")){ x_mm = Double.parseDouble(value);
-          Log.d("DEBUG", "X dimension set to" + x_mm);
-          xpix = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_MM, (int)(x_mm), getResources().getDisplayMetrics());
-          resizeImage(xpix, ypix);
+        if(x_or_y.equals("X")){
+          x_mm = Integer.parseInt(value);
+          xpix = x_mm;
+          x_mm = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_MM, (x_mm), getResources().getDisplayMetrics());
+          resizeImage(x_mm, y_mm);
           ((MySurfaceView) findViewById(R.id.image_here)).invalidateme();
           x_or_y = "Y";
-        }else{ y_mm = Double.parseDouble(value);
-          Log.d("DEBUG", "Y dimension set to" + y_mm);
-          ypix = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_MM, (int) (y_mm), getResources().getDisplayMetrics());
-          resizeImage(xpix, ypix);
+        }else{ y_mm = Integer.parseInt(value);
+          ypix = y_mm;
+          y_mm = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_MM, (y_mm), getResources().getDisplayMetrics());
+          resizeImage(x_mm, y_mm);
           ((MySurfaceView) findViewById(R.id.image_here)).invalidateme();
           x_or_y = "X";
         }
-        return;
-        // Do something with value!
       }
     });
 
     alert.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-      public void onClick(DialogInterface dialog, int whichButton) {
-
-        return;}
+      public void onClick(DialogInterface dialog, int whichButton) {}
     });
     alert.show();
     return 0;

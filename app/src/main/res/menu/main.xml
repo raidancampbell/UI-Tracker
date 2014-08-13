@@ -19,7 +19,11 @@
           android:orderInCategory="100"
           app:showAsAction="never" />
     <item android:id="@+id/size_settings"
-          android:title="Set Image Size"
+          android:title="Set Image Size mm"
+          android:orderInCategory="100"
+          app:showAsAction="never" />
+    <item android:id="@+id/sizepx_settings"
+          android:title="Set Image Size px"
           android:orderInCategory="100"
           app:showAsAction="never" />
 </menu>
