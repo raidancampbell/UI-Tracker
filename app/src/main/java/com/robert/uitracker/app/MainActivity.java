@@ -63,7 +63,7 @@ public class MainActivity extends ActionBarActivity {
     else bottomTop[0] = bottomImage;
     if(!topImageIsShown)bottomTop[1] = blank;
     else bottomTop[1] = topImage;
-    ((ImageView) findViewById(R.id.image_here)).setBackground(new LayerDrawable(bottomTop));
+    (findViewById(R.id.image_here)).setBackgroundDrawable(new LayerDrawable(bottomTop));
     Log.d("Err","background just set");
   }
 
