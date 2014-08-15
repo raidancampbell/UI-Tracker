@@ -8,8 +8,7 @@
     android:background="#ffffffff"
     android:baselineAligned="true">
     <com.robert.uitracker.app.MySurfaceView
-        android:layout_width="2.021in"
-        android:layout_height="1.564in"
-        android:background="@drawable/ppoverlay"
+        android:layout_width="300dp"
+        android:layout_height="300dp"
         android:id="@+id/image_here"/>
 </LinearLayout>
